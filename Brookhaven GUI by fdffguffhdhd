@@ -1,122 +1,94 @@
--- Fryhub GUI by عزوز 🇧🇷
+-- F 3 bro hub
+-- تطوير: عزوز 🇧🇷
+-- صورة خلفية برازيل + حذف القوائم الغير مرغوبة + تعديل كامل
 
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TopBar = Instance.new("Frame")
+local UICorner2 = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local Scroll = Instance.new("ScrollingFrame")
+local UIListLayout = Instance.new("UIListLayout")
+local Creator = Instance.new("TextLabel")
+local BG = Instance.new("ImageLabel")
 
--- إنشاء ScreenGui
-local gui = Instance.new("ScreenGui")
-gui.Name = "Fryhub"
-gui.Parent = playerGui
+ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "F3BroHub"
 
--- واجهة رئيسية
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 420, 0, 320)
-mainFrame.Position = UDim2.new(0.5, -210, 0.5, -160)
-mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-mainFrame.BackgroundTransparency = 0.15
-mainFrame.BorderSizePixel = 0
-mainFrame.Parent = gui
-mainFrame.Visible = false
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Position = UDim2.new(0.25, 0, 0.15, 0)
+MainFrame.Size = UDim2.new(0, 500, 0, 350)
+MainFrame.ZIndex = 10
 
--- صورة عين إيتاشي متحركة (حطيت ID مناسب)
-local eye = Instance.new("ImageLabel")
-eye.Size = UDim2.new(1, 0, 1, 0)
-eye.BackgroundTransparency = 1
-eye.Image = "rbxassetid://13452412359" -- عين مانقيكيو
-eye.Parent = mainFrame
+UICorner.Parent = MainFrame
 
--- صوت خلفي عند تشغيل الواجهة
-local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://9127153419"
-sound.Volume = 1.5
-sound.Looped = false
-sound.Parent = playerGui
+BG.Name = "BG"
+BG.Parent = MainFrame
+BG.BackgroundTransparency = 1
+BG.Size = UDim2.new(1, 0, 1, 0)
+BG.ZIndex = 1
+BG.Image = "https://media.discordapp.net/attachments/1158499486775980134/1244640907614183445/brazilflag.gif"
 
--- زر مطور
-local devButton = Instance.new("TextButton")
-devButton.Size = UDim2.new(0, 200, 0, 50)
-devButton.Position = UDim2.new(0.5, -100, 1, -60)
-devButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-devButton.BorderSizePixel = 0
-devButton.Text = "مطور عزوز 🇧🇷"
-devButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-devButton.TextScaled = true
-devButton.Parent = mainFrame
+TopBar.Name = "TopBar"
+TopBar.Parent = MainFrame
+TopBar.BackgroundColor3 = Color3.fromRGB(0, 85, 0)
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.ZIndex = 11
 
-devButton.MouseButton1Click:Connect(function()
-	game.StarterGui:SetCore("SendNotification", {
-		Title = "Fryhub",
-		Text = "المطور: عزوز 🇧🇷",
-		Duration = 5,
-	})
-end)
+UICorner2.Parent = TopBar
 
--- زر تشغيل سكربت DMC-BrookeHaven بعد حذف قائمة المعلومات
-local runButton = Instance.new("TextButton")
-runButton.Size = UDim2.new(0, 200, 0, 50)
-runButton.Position = UDim2.new(0.5, -100, 0, 10)
-runButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-runButton.BorderSizePixel = 0
-runButton.Text = "تشغيل Brookhaven"
-runButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-runButton.TextScaled = true
-runButton.Parent = mainFrame
+Title.Name = "Title"
+Title.Parent = TopBar
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.Size = UDim2.new(1, 0, 1, 0)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "F 3 bro hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 22
+Title.ZIndex = 12
 
--- دالة لتحميل وتعديل السكربت من الإنترنت
-local function loadAndRunModifiedScript()
-	local url = "https://raw.githubusercontent.com/hdhjvcfik/KAYHUB/refs/heads/main/DMC-BrookeHaven.lua"
-	local http = game:GetService("HttpService")
+Scroll.Name = "Scroll"
+Scroll.Parent = MainFrame
+Scroll.BackgroundTransparency = 1
+Scroll.Position = UDim2.new(0.05, 0, 0.15, 0)
+Scroll.Size = UDim2.new(0.9, 0, 0.7, 0)
+Scroll.CanvasSize = UDim2.new(0, 0, 1, 0)
+Scroll.ZIndex = 12
 
-	-- جلب السكربت كنص
-	local success, scriptText = pcall(function()
-		return game:HttpGet(url)
+UIListLayout.Parent = Scroll
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 10)
+
+-- زر مثال
+local function createButton(name, scriptURL)
+	local btn = Instance.new("TextButton")
+	btn.Text = name
+	btn.Size = UDim2.new(1, -10, 0, 40)
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 18
+	btn.Parent = Scroll
+
+	btn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet(scriptURL))()
 	end)
-
-	if not success then
-		warn("فشل في تحميل السكربت من الإنترنت")
-		return
-	end
-
-	-- حذف أو تعطيل قائمة المعلومات (نفترض أن القائمة اسمها 'Info' أو 'Information')
-	-- تعديل نصي بسيط، تحذف السطر أو الكود المسؤول عن القائمة.
-	-- هذا مثال مبسط جداً، يمكن تحتاج تعديل حسب السكربت الأصلي.
-
-	-- نحذف الكود الخاص بالقائمة: مثلاً لو فيه سطر فيه 'Info' أو 'Information' نحذفه
-	-- لزيادة الدقة، نحاول نعطل السطر اللي فيه اسم القائمة.
-
-	-- مثال: حذف كل الأسطر التي تحتوي على كلمة "Info"
-	local modifiedScript = ""
-	for line in scriptText:gmatch("[^\r\n]+") do
-		if not line:match("[Ii]nfo") then
-			modifiedScript = modifiedScript .. line .. "\n"
-		end
-	end
-
-	-- تنفيذ السكربت المعدل
-	local func, err = loadstring(modifiedScript)
-	if not func then
-		warn("خطأ في تنفيذ السكربت: "..err)
-		return
-	end
-
-	func()
 end
 
-runButton.MouseButton1Click:Connect(function()
-	loadAndRunModifiedScript()
-end)
+-- أضف السكربتات هنا:
+createButton("سكربت Brookhaven", "https://raw.githubusercontent.com/OpenSourceEngine/Script/refs/heads/main/Brookhaven.lua")
 
--- إظهار الواجهة مع تأثير دخول
-mainFrame.Visible = true
-mainFrame:TweenSize(UDim2.new(0, 420, 0, 320), Enum.EasingDirection.Out, Enum.EasingStyle.Back, 1, true)
-sound:Play()
-
--- نص دائمي أسفل الشاشة
-local tag = Instance.new("TextLabel")
-tag.Size = UDim2.new(0, 220, 0, 30)
-tag.Position = UDim2.new(0.5, -110, 1, -40)
-tag.BackgroundTransparency = 1
-tag.Text = "📜 Fryhub GUI | عزوز 🇧🇷"
-tag.TextColor3 = Color3.fromRGB(255, 255, 255)
-tag.TextScaled = true
-tag.Parent = gui
+Creator.Name = "Creator"
+Creator.Parent = MainFrame
+Creator.BackgroundTransparency = 1
+Creator.Position = UDim2.new(0.5, -100, 0.92, 0)
+Creator.Size = UDim2.new(0, 200, 0, 30)
+Creator.Font = Enum.Font.Gotham
+Creator.Text = "المطور: عزوز 🇧🇷"
+Creator.TextColor3 = Color3.fromRGB(255, 255, 255)
+Creator.TextSize = 16
+Creator.ZIndex = 12
