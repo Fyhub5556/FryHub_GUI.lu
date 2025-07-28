@@ -1,39 +1,62 @@
--- FryHub GUI by fdffguffhdhd | Inspired by Delta GUI
+--!strict
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-local FryHub = Instance.new("ScreenGui", game.CoreGui)
-FryHub.Name = "FryHubDelta"
+-- شاشة البداية
+local splashGui = Instance.new("ScreenGui", playerGui)
+splashGui.Name = "SplashItachi"
+splashGui.ResetOnSpawn = false
 
--- (أضف الكود الخاص بالواجهة المتحركة مع صورة أنمي وصوت كما أرسلته من قبل)
+local bg = Instance.new("Frame", splashGui)
+bg.Size = UDim2.new(1,0,1,0)
+bg.BackgroundColor3 = Color3.new(0,0,0)
 
--- ... [كود الدخول الأنمي وصوت]
+local eye = Instance.new("ImageLabel", bg)
+eye.Size = UDim2.new(0, 300, 0, 300)
+eye.Position = UDim2.new(0.5, -150, 0.5, -150)
+eye.BackgroundTransparency = 1
+eye.Image = "rbxassetid://1330709741" -- صورة عين إيتاشي
 
--- بعد انتهاء الدخول، ننشئ القائمة الرئيسية:
-local MainFrame = Instance.new("Frame", FryHub)
-MainFrame.Size = UDim2.new(0, 450, 0, 400)
-MainFrame.Position = UDim2.new(0.5, -225, 0.5, -200)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+local sound = Instance.new("Sound", splashGui)
+sound.SoundId = "rbxassetid://911882456" -- صوت مناسب لإيتاشي
+sound.Volume = 0.6
+sound:Play()
 
--- عنوان
-local TitleLabel = Instance.new("TextLabel", MainFrame)
-TitleLabel.Size = UDim2.new(1, 0, 0, 50)
-TitleLabel.Text = "FryHub | by fdffguffhdhd"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
-TitleLabel.Font = Enum.Font.GothamBlack
-TitleLabel.TextScaled = true
-TitleLabel.BackgroundTransparency = 1
+-- عرض لافتة "مطور عزوز 🇧🇷"
+local devTagGui = Instance.new("ScreenGui", playerGui)
+devTagGui.Name = "DevTag"
 
--- زر Brookhaven
-local BrookButton = Instance.new("TextButton", MainFrame)
-BrookButton.Size = UDim2.new(0.8, 0, 0, 40)
-BrookButton.Position = UDim2.new(0.1, 0, 0.3, 0)
-BrookButton.Text = "Brookhaven Hub Script"
-BrookButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
-BrookButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-BrookButton.Font = Enum.Font.GothamBold
-BrookButton.TextScaled = true
-Instance.new("UICorner", BrookButton).CornerRadius = UDim.new(0, 8)
+local tag = Instance.new("TextLabel", devTagGui)
+tag.Size = UDim2.new(0, 250, 0, 40)
+tag.Position = UDim2.new(0, 10, 1, -50)
+tag.BackgroundTransparency = 0.5
+tag.BackgroundColor3 = Color3.fromRGB(20,20,20)
+tag.TextColor3 = Color3.new(1,1,1)
+tag.Font = Enum.Font.GothamBold
+tag.TextSize = 22
+tag.Text = "مطور عزوز 🇧🇷"
 
-BrookButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/OpenSourceEngine/Script/refs/heads/main/Brookhaven.lua", true))()
+-- تحميل GUI دلتا (بدون مفتاح وبدون قائمة معلومات)
+local function loadDelta()
+    local url = "https://raw.githubusercontent.com/hdhjvcfik/KAYHUB/main/DMC-BrookeHaven.lua"
+    local success, response = pcall(function()
+        return game:HttpGet(url)
+    end)
+
+    if success and response then
+        -- إزالة نظام المفتاح من السكربت
+        local cleanScript = response:gsub("[^\r\n]*KeySystem[^\r\n]*\r?\n?", "") -- يحذف كل سطر فيه KeySystem
+        cleanScript = cleanScript:gsub("infoTab%[[^%]]*%]%s*=%s*{.-}", "") -- يحذف قائمة المعلومات
+        loadstring(cleanScript)()
+    else
+        warn("فشل تحميل سكربت دلتا من GitHub.")
+    end
+end
+
+-- تأخير ثم تشغيل دلتا GUI
+task.delay(5, function()
+    splashGui.Enabled = false
+    loadDelta()
 end)
