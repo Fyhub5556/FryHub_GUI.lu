@@ -1,0 +1,79 @@
+-- FryHub by fdffguffhdhd
+-- واجهة دخول متحركة + واجهة GUI منظمة
+
+local FryHub = Instance.new("ScreenGui")
+FryHub.Name = "FryHub"
+FryHub.ResetOnSpawn = false
+FryHub.DisplayOrder = 1000
+FryHub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+FryHub.Parent = game.CoreGui
+
+-- واجهة دخول (Animated Intro)
+local IntroFrame = Instance.new("Frame")
+IntroFrame.Size = UDim2.new(1, 0, 1, 0)
+IntroFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+IntroFrame.BorderSizePixel = 0
+IntroFrame.Parent = FryHub
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(0.8, 0, 0.2, 0)
+Title.Position = UDim2.new(0.1, 0, 0.4, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Welcome to FryHub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 0)
+Title.TextStrokeTransparency = 0
+Title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+Title.Font = Enum.Font.GothamBlack
+Title.TextScaled = true
+Title.Parent = IntroFrame
+
+local MadeBy = Instance.new("TextLabel")
+MadeBy.Size = UDim2.new(0.8, 0, 0.1, 0)
+MadeBy.Position = UDim2.new(0.1, 0, 0.6, 0)
+MadeBy.BackgroundTransparency = 1
+MadeBy.Text = "by fdffguffhdhd"
+MadeBy.TextColor3 = Color3.fromRGB(255, 255, 255)
+MadeBy.Font = Enum.Font.Gotham
+MadeBy.TextScaled = true
+MadeBy.Parent = IntroFrame
+
+wait(3)
+IntroFrame:Destroy()
+
+-- الواجهة الرئيسية
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundTransparency = 0.05
+MainFrame.Parent = FryHub
+
+local UICorner = Instance.new("UICorner", MainFrame)
+UICorner.CornerRadius = UDim.new(0, 12)
+
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 50)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "FryHub Menu"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+TitleLabel.Font = Enum.Font.GothamBlack
+TitleLabel.TextScaled = true
+TitleLabel.Parent = MainFrame
+
+-- زر مثال - هنا تقدر تضيف أي سكربتات لاحقًا
+local ExampleButton = Instance.new("TextButton")
+ExampleButton.Size = UDim2.new(0.8, 0, 0, 40)
+ExampleButton.Position = UDim2.new(0.1, 0, 0.3, 0)
+ExampleButton.Text = "Script Example"
+ExampleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+ExampleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ExampleButton.Font = Enum.Font.GothamBold
+ExampleButton.TextScaled = true
+ExampleButton.Parent = MainFrame
+Instance.new("UICorner", ExampleButton).CornerRadius = UDim.new(0, 8)
+
+ExampleButton.MouseButton1Click:Connect(function()
+    -- هنا تضع السكربت الفعلي
+    print("Script running...")
+end)
