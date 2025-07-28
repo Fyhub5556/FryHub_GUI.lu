@@ -1,62 +1,122 @@
---!strict
-local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
-local player = Players.LocalPlayer
+-- Fryhub GUI by عزوز 🇧🇷
+
+local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- شاشة البداية
-local splashGui = Instance.new("ScreenGui", playerGui)
-splashGui.Name = "SplashItachi"
-splashGui.ResetOnSpawn = false
+-- إنشاء ScreenGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "Fryhub"
+gui.Parent = playerGui
 
-local bg = Instance.new("Frame", splashGui)
-bg.Size = UDim2.new(1,0,1,0)
-bg.BackgroundColor3 = Color3.new(0,0,0)
+-- واجهة رئيسية
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 420, 0, 320)
+mainFrame.Position = UDim2.new(0.5, -210, 0.5, -160)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+mainFrame.BackgroundTransparency = 0.15
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = gui
+mainFrame.Visible = false
 
-local eye = Instance.new("ImageLabel", bg)
-eye.Size = UDim2.new(0, 300, 0, 300)
-eye.Position = UDim2.new(0.5, -150, 0.5, -150)
+-- صورة عين إيتاشي متحركة (حطيت ID مناسب)
+local eye = Instance.new("ImageLabel")
+eye.Size = UDim2.new(1, 0, 1, 0)
 eye.BackgroundTransparency = 1
-eye.Image = "rbxassetid://1330709741" -- صورة عين إيتاشي
+eye.Image = "rbxassetid://13452412359" -- عين مانقيكيو
+eye.Parent = mainFrame
 
-local sound = Instance.new("Sound", splashGui)
-sound.SoundId = "rbxassetid://911882456" -- صوت مناسب لإيتاشي
-sound.Volume = 0.6
-sound:Play()
+-- صوت خلفي عند تشغيل الواجهة
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://9127153419"
+sound.Volume = 1.5
+sound.Looped = false
+sound.Parent = playerGui
 
--- عرض لافتة "مطور عزوز 🇧🇷"
-local devTagGui = Instance.new("ScreenGui", playerGui)
-devTagGui.Name = "DevTag"
+-- زر مطور
+local devButton = Instance.new("TextButton")
+devButton.Size = UDim2.new(0, 200, 0, 50)
+devButton.Position = UDim2.new(0.5, -100, 1, -60)
+devButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+devButton.BorderSizePixel = 0
+devButton.Text = "مطور عزوز 🇧🇷"
+devButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+devButton.TextScaled = true
+devButton.Parent = mainFrame
 
-local tag = Instance.new("TextLabel", devTagGui)
-tag.Size = UDim2.new(0, 250, 0, 40)
-tag.Position = UDim2.new(0, 10, 1, -50)
-tag.BackgroundTransparency = 0.5
-tag.BackgroundColor3 = Color3.fromRGB(20,20,20)
-tag.TextColor3 = Color3.new(1,1,1)
-tag.Font = Enum.Font.GothamBold
-tag.TextSize = 22
-tag.Text = "مطور عزوز 🇧🇷"
+devButton.MouseButton1Click:Connect(function()
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "Fryhub",
+		Text = "المطور: عزوز 🇧🇷",
+		Duration = 5,
+	})
+end)
 
--- تحميل GUI دلتا (بدون مفتاح وبدون قائمة معلومات)
-local function loadDelta()
-    local url = "https://raw.githubusercontent.com/hdhjvcfik/KAYHUB/main/DMC-BrookeHaven.lua"
-    local success, response = pcall(function()
-        return game:HttpGet(url)
-    end)
+-- زر تشغيل سكربت DMC-BrookeHaven بعد حذف قائمة المعلومات
+local runButton = Instance.new("TextButton")
+runButton.Size = UDim2.new(0, 200, 0, 50)
+runButton.Position = UDim2.new(0.5, -100, 0, 10)
+runButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+runButton.BorderSizePixel = 0
+runButton.Text = "تشغيل Brookhaven"
+runButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+runButton.TextScaled = true
+runButton.Parent = mainFrame
 
-    if success and response then
-        -- إزالة نظام المفتاح من السكربت
-        local cleanScript = response:gsub("[^\r\n]*KeySystem[^\r\n]*\r?\n?", "") -- يحذف كل سطر فيه KeySystem
-        cleanScript = cleanScript:gsub("infoTab%[[^%]]*%]%s*=%s*{.-}", "") -- يحذف قائمة المعلومات
-        loadstring(cleanScript)()
-    else
-        warn("فشل تحميل سكربت دلتا من GitHub.")
-    end
+-- دالة لتحميل وتعديل السكربت من الإنترنت
+local function loadAndRunModifiedScript()
+	local url = "https://raw.githubusercontent.com/hdhjvcfik/KAYHUB/refs/heads/main/DMC-BrookeHaven.lua"
+	local http = game:GetService("HttpService")
+
+	-- جلب السكربت كنص
+	local success, scriptText = pcall(function()
+		return game:HttpGet(url)
+	end)
+
+	if not success then
+		warn("فشل في تحميل السكربت من الإنترنت")
+		return
+	end
+
+	-- حذف أو تعطيل قائمة المعلومات (نفترض أن القائمة اسمها 'Info' أو 'Information')
+	-- تعديل نصي بسيط، تحذف السطر أو الكود المسؤول عن القائمة.
+	-- هذا مثال مبسط جداً، يمكن تحتاج تعديل حسب السكربت الأصلي.
+
+	-- نحذف الكود الخاص بالقائمة: مثلاً لو فيه سطر فيه 'Info' أو 'Information' نحذفه
+	-- لزيادة الدقة، نحاول نعطل السطر اللي فيه اسم القائمة.
+
+	-- مثال: حذف كل الأسطر التي تحتوي على كلمة "Info"
+	local modifiedScript = ""
+	for line in scriptText:gmatch("[^\r\n]+") do
+		if not line:match("[Ii]nfo") then
+			modifiedScript = modifiedScript .. line .. "\n"
+		end
+	end
+
+	-- تنفيذ السكربت المعدل
+	local func, err = loadstring(modifiedScript)
+	if not func then
+		warn("خطأ في تنفيذ السكربت: "..err)
+		return
+	end
+
+	func()
 end
 
--- تأخير ثم تشغيل دلتا GUI
-task.delay(5, function()
-    splashGui.Enabled = false
-    loadDelta()
+runButton.MouseButton1Click:Connect(function()
+	loadAndRunModifiedScript()
 end)
+
+-- إظهار الواجهة مع تأثير دخول
+mainFrame.Visible = true
+mainFrame:TweenSize(UDim2.new(0, 420, 0, 320), Enum.EasingDirection.Out, Enum.EasingStyle.Back, 1, true)
+sound:Play()
+
+-- نص دائمي أسفل الشاشة
+local tag = Instance.new("TextLabel")
+tag.Size = UDim2.new(0, 220, 0, 30)
+tag.Position = UDim2.new(0.5, -110, 1, -40)
+tag.BackgroundTransparency = 1
+tag.Text = "📜 Fryhub GUI | عزوز 🇧🇷"
+tag.TextColor3 = Color3.fromRGB(255, 255, 255)
+tag.TextScaled = true
+tag.Parent = gui
